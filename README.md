@@ -20,11 +20,65 @@ This workspace requires a CAD-Query MCP server to be running. The MCP server han
 ## Workspace Structure
 
 ```
-├── docs/cadquery/          # CAD-Query reference documentation (for Claude)
-├── examples/               # Sample CAD-Query scripts
-├── outputs/                # Generated STL files and visualizations
-└── CLAUDE.md              # Instructions for Claude Code
+├── skills/
+│   └── cadquery-modeling/       # Claude Code skill for CAD generation
+│       ├── SKILL.md             # Main skill instructions
+│       ├── api-reference.md     # Quick API reference
+│       └── examples.md          # Example patterns
+├── scripts/
+│   └── build-skill.sh           # Build skill ZIP packages
+├── .mcp.json                    # MCP server configuration
+├── docs/cadquery/               # CAD-Query reference documentation
+├── examples/                    # Sample CAD-Query scripts
+├── outputs/                     # Generated STL files and visualizations
+└── CLAUDE.md                    # Instructions for Claude Code
 ```
+
+## Setup
+
+### 1. Configure MCP Server
+
+The workspace includes `.mcp.json` with a template configuration. Update it with your CAD-Query MCP server:
+
+```json
+{
+  "mcpServers": {
+    "cadquery": {
+      "command": "your-cadquery-mcp-server-command",
+      "args": ["--output-dir", "outputs"]
+    }
+  }
+}
+```
+
+### 2. Install the Skill
+
+Build and install the skill package:
+
+```bash
+# Build skill ZIP
+./scripts/build-skill.sh cadquery-modeling
+
+# Install in Claude Code (from dist/)
+claude skill install dist/cadquery-modeling.zip
+```
+
+Or install directly from the skills directory:
+
+```bash
+claude skill install skills/cadquery-modeling
+```
+
+### 3. Verify Installation
+
+```
+> What skills are available?
+```
+
+The `cadquery-modeling` skill provides:
+- Workflow instructions for using MCP tools
+- API quick reference for CAD-Query methods
+- Example patterns for common modeling tasks
 
 ## Usage for Claude Code
 
@@ -75,6 +129,23 @@ This workspace includes basic development tools:
 # Run tests
 uv run pytest
 
-# Code quality checks  
+# Code quality checks
 ./run_lint.sh
+
+# Build skill packages
+./scripts/build-skill.sh
+
+# Build specific skill
+./scripts/build-skill.sh cadquery-modeling
 ```
+
+### CI/CD
+
+The repository uses GitHub Actions to validate and package skills:
+
+- **Skill validation**: Checks SKILL.md format and required fields
+- **Package generation**: Creates distributable ZIP files
+- **API testing**: Validates skill upload compatibility
+- **Claude Code testing**: Verifies skill integration
+
+CI runs automatically on pushes/PRs that modify files in `skills/`.

@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "cadquery": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${workspaceFolder}",
+        "cadquery-mcp-server"
+      ],
+      "env": {
+        "OUTPUT_DIR": "${workspaceFolder}/outputs"
+      }
+    }
+  }
+}

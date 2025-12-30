@@ -1,0 +1,25 @@
+name: Skill CI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - '.github/workflows/skill-ci.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'skills/**'
+      - '.github/workflows/skill-ci.yml'
+  workflow_dispatch:
+
+jobs:
+  skill-ci:
+    uses: robtaylor/skills/.github/workflows/skill-ci.yml@add-skill-ci
+    with:
+      skill_path: skills
+      multi_skill: true
+      run_api_test: true
+      run_claude_code_test: true
+    secrets:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
